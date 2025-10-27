@@ -7,6 +7,7 @@ Disciplina: Compiladores
 👨‍💻 Alunos
 
 André Victor Macedo Pereira — Andrevictor20
+
 Italo Matheus Rodrigues Sousa — ItaloMatheus10
 
 
