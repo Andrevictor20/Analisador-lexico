@@ -1,6 +1,7 @@
 # Analisador-lexico
 
 Universidade Federal do Maranhão (UFMA)
+
 Disciplina: Compiladores
 
 👨‍💻 Alunos
