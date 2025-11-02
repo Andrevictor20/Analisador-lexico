@@ -1,11 +1,28 @@
 package br.com.analisadorlexico;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import static br.com.analisadorlexico.TokenType.*;
+import static br.com.analisadorlexico.TokenType.BANG;
+import static br.com.analisadorlexico.TokenType.BANG_EQUAL;
+import static br.com.analisadorlexico.TokenType.COMMA;
+import static br.com.analisadorlexico.TokenType.DOT;
+import static br.com.analisadorlexico.TokenType.EOF;
+import static br.com.analisadorlexico.TokenType.EQUAL;
+import static br.com.analisadorlexico.TokenType.EQUAL_EQUAL;
+import static br.com.analisadorlexico.TokenType.GREATER;
+import static br.com.analisadorlexico.TokenType.GREATER_EQUAL;
+import static br.com.analisadorlexico.TokenType.LEFT_BRACE;
+import static br.com.analisadorlexico.TokenType.LEFT_PAREN;
+import static br.com.analisadorlexico.TokenType.LESS;
+import static br.com.analisadorlexico.TokenType.LESS_EQUAL;
+import static br.com.analisadorlexico.TokenType.MINUS;
+import static br.com.analisadorlexico.TokenType.PLUS;
+import static br.com.analisadorlexico.TokenType.RIGHT_BRACE;
+import static br.com.analisadorlexico.TokenType.RIGHT_PAREN;
+import static br.com.analisadorlexico.TokenType.SEMICOLON;
+import static br.com.analisadorlexico.TokenType.SLASH;
+import static br.com.analisadorlexico.TokenType.STAR;
 
 class Scanner {
   private final String source;
@@ -32,16 +49,44 @@ class Scanner {
   private void scanToken() {
     char c = advance();
     switch (c) {
-      case '(': addToken(LEFT_PAREN); break;
-      case ')': addToken(RIGHT_PAREN); break;
-      case '{': addToken(LEFT_BRACE); break;
-      case '}': addToken(RIGHT_BRACE); break;
-      case ',': addToken(COMMA); break;
-      case '.': addToken(DOT); break;
-      case '-': addToken(MINUS); break;
-      case '+': addToken(PLUS); break;
-      case ';': addToken(SEMICOLON); break;
-      case '*': addToken(STAR); break;
+      case '(':
+        addToken(LEFT_PAREN);
+        break;
+      case ')':
+        addToken(RIGHT_PAREN);
+        break;
+      case '{':
+        addToken(LEFT_BRACE);
+        break;
+      case '}':
+        addToken(RIGHT_BRACE);
+        break;
+      case ',':
+        addToken(COMMA);
+        break;
+      case '.':
+        addToken(DOT);
+        break;
+      case '-':
+        addToken(MINUS);
+        break;
+      case '+':
+        addToken(PLUS);
+        break;
+      case ';':
+        addToken(SEMICOLON);
+        break;
+      case '*':
+        addToken(STAR);
+        break;
+      case '/':
+        if (match('/')) {
+          while (peek() != '\n' && !isAtEnd())
+            advance();
+        } else {
+          addToken(SLASH);
+        }
+        break;
       case '!':
         addToken(match('=') ? BANG_EQUAL : BANG);
         break;
@@ -53,20 +98,39 @@ class Scanner {
         break;
       case '>':
         addToken(match('=') ? GREATER_EQUAL : GREATER);
-        break; 
+        break;
+      case ' ':
+      case '\r':
+      case '\t':
+        break;
+
+      case '\n':
+        line++;
+        break;
+
+      
 
       default:
         Lox.error(line, "Unexpected character.");
         break;
-      }
     }
+  }
 
-  private  boolean  match ( char  expected ) {
-     if ( isAtEnd ()) return  false ;
-     if ( source . charAt ( current ) != expected ) return  false ; current ++;
-     return true ; 
-  }  
-  
+  private boolean match(char expected) {
+    if (isAtEnd())
+      return false;
+    if (source.charAt(current) != expected)
+      return false;
+    current++;
+    return true;
+  }
+
+  private char peek() {
+    if (isAtEnd())
+      return '\0';
+    return source.charAt(current);
+  }
+
   private boolean isAtEnd() {
     return current >= source.length();
   }
@@ -83,6 +147,5 @@ class Scanner {
     String text = source.substring(start, current);
     tokens.add(new Token(type, text, literal, line));
   }
-  
-  
+
 }
