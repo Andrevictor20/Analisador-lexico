@@ -1,4 +1,4 @@
-# Analisador-lexico
+#Interpretador Java Lox
 
 Universidade Federal do Maranhão (UFMA)
 
