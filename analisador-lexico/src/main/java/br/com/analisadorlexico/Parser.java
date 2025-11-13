@@ -12,9 +12,11 @@ class Parser {
   Parser(List<Token> tokens) {
     this.tokens = tokens;
   }
+
   private Expr expression() {
     return equality();
   }
+
   private Expr equality() {
     Expr expr = comparison();
 
@@ -26,6 +28,8 @@ class Parser {
     
     return expr;
   }
+
+
   private Expr comparison() {
     Expr expr = term();
 
@@ -126,6 +130,28 @@ class Parser {
     return new ParseError();
   }
 
+  private void synchronize() {
+    advance();
+
+    while (!isAtEnd()) {
+      if (previous().type == SEMICOLON) return;
+
+      switch (peek().type) {
+        case CLASS:
+        case FUN:
+        case VAR:
+        case FOR:
+        case IF:
+        case WHILE:
+        case PRINT:
+        case RETURN:
+          return;
+      }
+
+      advance();
+    }
+  }
+  
   private Token consume(TokenType type, String message) {
     if (check(type)) return advance();
 
