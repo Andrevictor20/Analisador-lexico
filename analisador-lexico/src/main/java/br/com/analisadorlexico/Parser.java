@@ -1,8 +1,8 @@
-ackage com.craftinginterpreters.lox;
+package br.com.analisadorlexico;
 
 import java.util.List;
 
-import static com.craftinginterpreters.lox.TokenType.*;
+import static br.com.analisadorlexico.lox.TokenType.*;
 
 class Parser {
   private final List<Token> tokens;
@@ -14,7 +14,7 @@ class Parser {
   private Expr expression() {
     return equality();
   }
-   private Expr equality() {
+  private Expr equality() {
     Expr expr = comparison();
 
     while (match(BANG_EQUAL, EQUAL_EQUAL)) {
@@ -25,7 +25,7 @@ class Parser {
     
     return expr;
   }
-    private Expr comparison() {
+  private Expr comparison() {
     Expr expr = term();
 
     while (match(GREATER, GREATER_EQUAL, LESS, LESS_EQUAL)) {
@@ -37,7 +37,7 @@ class Parser {
     return expr;
   }
 
-   private Expr term() {
+  private Expr term() {
     Expr expr = factor();
 
     while (match(MINUS, PLUS)) {
@@ -49,7 +49,7 @@ class Parser {
     return expr;
   }
 
-   private Expr factor() {
+  private Expr factor() {
     Expr expr = unary();
 
     while (match(SLASH, STAR)) {
@@ -61,7 +61,7 @@ class Parser {
     return expr;
   }
 
-    private Expr unary() {
+  private Expr unary() {
     if (match(BANG, MINUS)) {
       Token operator = previous();
       Expr right = unary();
@@ -71,7 +71,7 @@ class Parser {
     return primary();
   }
 
-    private Expr primary() {
+  private Expr primary() {
     if (match(FALSE)) return new Expr.Literal(false);
     if (match(TRUE)) return new Expr.Literal(true);
     if (match(NIL)) return new Expr.Literal(null);
@@ -86,6 +86,7 @@ class Parser {
       return new Expr.Grouping(expr);
     }
   }
+
   private boolean match(TokenType... types) {
     for (TokenType type : types) {
       if (check(type)) {
@@ -96,16 +97,18 @@ class Parser {
 
     return false;
   }
-    private boolean check(TokenType type) {
+
+  private boolean check(TokenType type) {
     if (isAtEnd()) return false;
     return peek().type == type;
   }
-   private Token advance() {
+
+  private Token advance() {
     if (!isAtEnd()) current++;
     return previous();
   }
 
-    private boolean isAtEnd() {
+  private boolean isAtEnd() {
     return peek().type == EOF;
   }
 
@@ -115,6 +118,12 @@ class Parser {
 
   private Token previous() {
     return tokens.get(current - 1);
+  }
+
+  private Token consume(TokenType type, String message) {
+    if (check(type)) return advance();
+
+    throw error(peek(), message);
   }
 
   
