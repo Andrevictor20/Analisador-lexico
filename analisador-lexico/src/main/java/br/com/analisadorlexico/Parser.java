@@ -132,6 +132,15 @@ class Parser {
     return new ParseError();
   }
 
+  Expr parse() {
+    try {
+      return expression();
+    } catch (ParseError error) {
+      return null;
+    }
+  }
+  
+
   private void synchronize() {
     advance();
 
