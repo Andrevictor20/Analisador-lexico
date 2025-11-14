@@ -6,17 +6,19 @@ class Interpreter implements Expr.Visitor<Object> {
         return expr.value;
     }
 
-     @Override
-  public Object visitUnaryExpr(Expr.Unary expr) {
-    Object right = evaluate(expr.right);
+    @Override
+    public Object visitUnaryExpr(Expr.Unary expr) {
+        Object right = evaluate(expr.right);
 
-    switch (expr.operator.type) {
-      case MINUS:
-        return -(double)right;
+        switch (expr.operator.type) {
+            case BANG:
+                return !isTruthy(right);
+            case MINUS:
+                return -(double) right;
+        }
+
+        return null;
     }
-
-    return null;
-  }
 
     @Override
     public Object visitGroupingExpr(Expr.Grouping expr) {
