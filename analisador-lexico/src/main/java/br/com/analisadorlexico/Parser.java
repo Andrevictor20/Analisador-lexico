@@ -140,7 +140,6 @@ class Parser {
     }
   }
   
-
   private void synchronize() {
     advance();
 

@@ -65,6 +65,7 @@ class Interpreter implements Expr.Visitor<Object> {
             case EQUAL_EQUAL:
                 return isEqual(left, right);
             case MINUS:
+                checkNumberOperand(expr.operator, right);
                 return (double) left - (double) right;
             case PLUS:
                 if (left instanceof Double && right instanceof Double) {
