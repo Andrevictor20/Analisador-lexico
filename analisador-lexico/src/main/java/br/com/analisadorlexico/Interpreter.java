@@ -1,5 +1,14 @@
 package br.com.analisadorlexico;
 
+void interpret(Expr expression) { 
+    try {
+      Object value = evaluate(expression);
+      System.out.println(stringify(value));
+    } catch (RuntimeError error) {
+      Lox.runtimeError(error);
+    }
+}
+
 class Interpreter implements Expr.Visitor<Object> {
     @Override
     public Object visitLiteralExpr(Expr.Literal expr) {
