@@ -20,6 +20,11 @@ class Interpreter implements Expr.Visitor<Object> {
         return null;
     }
 
+    private void checkNumberOperand(Token operator, Object operand) {
+        if (operand instanceof Double) return;
+        throw new RuntimeError(operator, "Operand must be a number.");
+    }
+
     private boolean isTruthy(Object object) {
         if (object == null)
             return false;
