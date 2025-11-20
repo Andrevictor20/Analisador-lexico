@@ -87,6 +87,7 @@ class Interpreter implements Expr.Visitor<Object> {
 
                 break;
             case SLASH:
+                checkNumberOperands(expr.operator, left, right);
                 return (double) left / (double) right;
             case STAR:
                 return (double) left * (double) right;
